@@ -15,7 +15,8 @@
     
 <div class="container">
         <div class="dashboard-list-box margin-bottom-10">
-            <form>
+            <form method="post" >
+                {% csrf_token %}
                 <div class="dashboard-list-box-static margin-bottom-50">
                     <!-- Row -->
                     <div class="row">
@@ -38,7 +39,7 @@
                             <h5>Adresse</h5>
                             <div class="input-with-icon location">
                                 <div id="autocomplete-container">
-                                    <input id="autocomplete-input" type="text" placeholder="Angré chateau" name="adresse">
+                                    <input id="autocomplete-input" type="text" placeholder="Angré chateau" name="address">
                                 </div>
                                 <a href="#"><i class="fa fa-map-marker"></i></a>
                             </div>

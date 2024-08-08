@@ -19,17 +19,16 @@
         <div class="col-md-3"></div>
         <div class="col-md-6">
            
-           <form method="post" action="#" class="register">
+           <form method="post" action="#" class="register" enctype="multipart/form-data">
                {% csrf_token %}
                 <p class="form-row form-row-wide">
                     {{ form.profile_image.label }}
                     {{ form.profile_image }}
                     <label for="sector">Secteur d'activité
-                        <select>
+                        <select name="sector">
                             {% for sector in sectors %}
-                            	<option> {{ sector.name }}</option>
+                            	<option value="{{ sector.id }}"> {{ sector.name }}</option>
                             {% endfor %}
-                            
                         </select>
                     </label>
                     {{ form.bio.label }}

@@ -80,6 +80,8 @@ class Artisan(models.Model):
     bio = models.TextField(null=True, blank=True)
     sex = models.CharField(max_length=20, choices=SEX, default='h')
     city = models.CharField(max_length=255, null=True, blank=True)
+    town = models.CharField(max_length=255, null=True, blank=True)
+    address = models.CharField(max_length=255, null=True, blank=True)
     location_lat = models.CharField(max_length=255, null=True, blank=True)
     location_lon = models.CharField(max_length=255, null=True, blank=True)
     study_level = models.CharField(max_length=255, null=True, blank=True)
@@ -93,7 +95,7 @@ class Artisan(models.Model):
     is_delete = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user
+        return self.user.username
 
 
 MEDIA_TYPE = [

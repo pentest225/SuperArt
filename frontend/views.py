@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.auth.models import User
 from django.utils.datastructures import MultiValueDictKeyError
 
@@ -234,7 +236,8 @@ def register_artisan(request):
             user.set_password(cleaned_data['password1'])
             user.save()
             login(request, user)
-            artisan = Artisan.objects.create(user=user, subscription_plan=selected_subscription, phone_number= cleaned_data['phone_number'])
+            artisan = Artisan.objects.create(user=user, subscription_plan=selected_subscription,
+                                             phone_number=cleaned_data['phone_number'])
             artisan.phone_number = cleaned_data['phone_number']
             artisan.sex = cleaned_data['sex']
             artisan.save()
@@ -252,14 +255,129 @@ def save_activity_info(request):
     sectors = Sector.objects.all()
     form = ActivityInfoForm()
     sector_choice = [(sector.id, sector.name) for sector in sectors]
-    # form.sectors.choices = sector_choice
-    print(sector_choice)
-    print(form)
+    error_message = {}
+    if request.method == 'POST':
+        form = ActivityInfoForm(request.POST, request.FILES)
+        selected_sector_id = request.POST.get('sector')
+        if form.is_valid() and selected_sector_id is not None:
+            cleaned_data = form.cleaned_data
+            artisan = Artisan.objects.get(user=request.user)
+            selected_sector = Sector.objects.get(id=selected_sector_id)
+            artisan.sector = selected_sector
+            artisan.profile_image = cleaned_data['profile_image']
+            artisan.whatsApp_phone = cleaned_data['whatsApp_phone']
+            artisan.bio = cleaned_data['bio']
+            artisan.save()
 
-    return render(request, 'auth/register-artisan/step-2-activity-info.html', {'form': form, 'sectors': sectors})
+            return redirect('register_artisan_step_3')
+        else:
+            print("Form is not valid")
+            print(form.errors)
+            print()
+            error_message['form'] = form.errors
+
+    return render(request, 'auth/register-artisan/step-2-activity-info.html',
+                  {'form': form, 'sectors': sectors, 'error_message': error_message})
+
+
+mock_location = locations = [
+    {
+        'city': 'Abidjan',
+        'town': 'Plateau',
+        'address': 'Avenue Chardy',
+        'location_lat': '5.322139',
+        'location_lon': '-4.007913'
+    },
+    {
+        'city': 'Abidjan',
+        'town': 'Cocody',
+        'address': 'Université Félix Houphouët-Boigny',
+        'location_lat': '5.341248',
+        'location_lon': '-4.007215'
+    },
+    {
+        'city': 'Abidjan',
+        'town': 'Yopougon',
+        'address': 'Marché de Yopougon',
+        'location_lat': '5.354781',
+        'location_lon': '-4.026229'
+    },
+    {
+        'city': 'Abidjan',
+        'town': 'Treichville',
+        'address': 'Boulevard de Marseille',
+        'location_lat': '5.308299',
+        'location_lon': '-4.015655'
+    },
+    {
+        'city': 'Abidjan',
+        'town': 'Adjamé',
+        'address': 'Place Adjamé',
+        'location_lat': '5.374489',
+        'location_lon': '-4.014254'
+    },
+    {
+        'city': 'Abidjan',
+        'town': 'Koumassi',
+        'address': 'Centre Commercial Koumassi',
+        'location_lat': '5.332762',
+        'location_lon': '-4.046678'
+    },
+    {
+        'city': 'Abidjan',
+        'town': 'Abobo',
+        'address': 'Marché d’Abobo',
+        'location_lat': '5.402267',
+        'location_lon': '-4.056923'
+    },
+    {
+        'city': 'Abidjan',
+        'town': 'Bingerville',
+        'address': 'Centre-ville de Bingerville',
+        'location_lat': '5.429287',
+        'location_lon': '-3.974183'
+    },
+    {
+        'city': 'Abidjan',
+        'town': 'Riviera',
+        'address': 'Riviera Palmeraie',
+        'location_lat': '5.367369',
+        'location_lon': '-4.035048'
+    },
+    {
+        'city': 'Abidjan',
+        'town': 'Marcory',
+        'address': 'Avenue des Martyrs',
+        'location_lat': '5.314646',
+        'location_lon': '-4.010106'
+    }
+]
 
 
 def save_activity_location(request):
+    error_message = {}
+    if request.method == 'POST':
+        city = request.POST.get('city')
+        town = request.POST.get('town')
+        address = request.POST.get('address')
+        if city and town and address:
+            artisan = Artisan.objects.get(user=request.user)
+            artisan.city = city
+            artisan.town = town
+            artisan.address = address
+            location = mock_location[random.randint(0, len(mock_location) - 1)]
+            artisan.location_lat = location['location_lat']
+            artisan.location_lon = location['location_lon']
+            artisan.save()
+            return redirect('index')
+        else:
+            print("Form is not valid")
+            print(city)
+            print(town)
+            print(address)
+            print(request.POST)
+            error_message['form'] = "Merci de vérifier les informations"
+
     return render(request, 'auth/register-artisan/step-3-location.html')
 
 

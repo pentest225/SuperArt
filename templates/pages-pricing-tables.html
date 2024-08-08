@@ -1,0 +1,110 @@
+{% extends 'bases/index-base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="clearfix"></div>
+<!-- Header Container / End -->
+
+
+<!-- Titlebar
+================================================== -->
+<div id="titlebar">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+
+				<h2>Formules de Paiement</h2>
+				<!-- Breadcrumbs -->
+				<nav id="breadcrumbs">
+					<ul>
+						<li><a href="#">Home</a></li>
+						<li>Formules de Paiement</li>
+					</ul>
+				</nav>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Pricing Tables
+================================================== -->
+
+<!-- Container / Start -->
+<div class="container">
+
+	<!-- Row / Start -->
+	<div class="row">
+		<div class="col-md-12">
+			<div class="pricing-container margin-top-30">
+			    <!-- Plan #1 -->
+                
+                	<div class="plan">
+
+					<div class="plan-price">
+						<h3>{{ plan0.name }}</h3>
+						<span class="value">{{ plan0.price }} Fcfa {{ plan0.price_type }}</span>
+						<span class="period">{{ plan0.description }}</span>
+					</div>
+
+					<div class="plan-features">
+						<ul>
+                            {% for feature in plan0.features.all %}
+                            	<li>{{ feature.name }}</li>
+                            {% endfor %}
+						</ul>
+						<a class="button border" href="{% url 'register_artisan' %}?subscription_name={{ plan0.name }}">Commencer</a>
+					</div>
+
+				</div>
+				<!-- Plan #3 -->
+				<div class="plan featured">
+
+					<div class="listing-badge">
+						<span class="featured">Recommandé</span>
+					</div>
+
+					<div class="plan-price">
+						<h3>{{ plan1.name }}</h3>
+						<span class="value">{{ plan1.price }} Fcfa {{ plan1.price_type }}</span>
+						<span class="period">{{ plan1.description }}</span>
+					</div>
+					<div class="plan-features">
+						<ul>
+                            {% for feature in plan1.features.all %}
+                            	<li>{{ feature.name }}</li>
+                            {% endfor %}
+						</ul>
+						<a class="button" href="{% url 'register_artisan' %}?subscription_name={{ plan1.name }}">Commencer</a>
+					</div>
+				</div>
+
+				<!-- Plan #3 -->
+				<div class="plan">
+
+					<div class="plan-price">
+						<h3>{{ plan2.name }}</h3>
+						<span class="value">{{plan2.price}} Fcfa {{ plan2.price_type }}</span>
+						<span class="period">{{ plan2.description}}</span>
+					</div>
+
+					<div class="plan-features">
+						<ul>
+                            {% for feature in plan2.features.all %}
+                            	<li>{{ feature.name }}</li>
+                            {% endfor %}
+						</ul>
+						<a class="button border" href="{% url 'register_artisan' %}?subscription_name={{ plan2.name }}">Commencer</a>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- Row / End -->
+
+</div>
+<!-- Container / End -->
+
+{% endblock %}

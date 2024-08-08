@@ -1,0 +1,98 @@
+{% extends 'bases/index-base.html' %}
+{% load static %}
+{% block content %}
+<div id="titlebar">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Creation de compte artisan</h2>
+                <h3>3/4 Localisation de l'activité</h3>
+                <!-- Breadcrumbs -->
+            </div>
+        </div>
+    </div>
+</div>
+    
+<div class="container">
+        <div class="dashboard-list-box margin-bottom-10">
+            <form>
+                <div class="dashboard-list-box-static margin-bottom-50">
+                    <!-- Row -->
+                    <div class="row">
+                        <div class="with-forms">
+                        <!-- City -->
+                        <div class="col-md-6">
+                            <h5>Ville</h5>
+                            <input type="text" placeholder="Abidjan" name="city">
+                        </div>
+    
+                        <!-- Address -->
+                        <div class="col-md-6">
+                            <h5>Commune</h5>
+                            <input type="text" placeholder="Cocody" name="town">
+                        </div>
+    
+                        <!-- City -->
+                        
+                        <div class="col-fs-12">
+                            <h5>Adresse</h5>
+                            <div class="input-with-icon location">
+                                <div id="autocomplete-container">
+                                    <input id="autocomplete-input" type="text" placeholder="Angré chateau" name="adresse">
+                                </div>
+                                <a href="#"><i class="fa fa-map-marker"></i></a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <!-- Row / End -->
+                        <div class="col-md-12">
+                            <div id="map-container">
+                                <div id="map" data-map-zoom="9" data-map-scroll="true">
+                                    <!-- map goes here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" class="button border fw margin-top-10" name="register" value="Suivant" />
+                </div>
+                
+            </form>
+    </div>
+</div>    
+
+
+{% endblock %}
+
+{% block googleMap %}
+    <script>
+          function initAutocomplete() {
+            var input = document.getElementById('autocomplete-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+        
+            autocomplete.addListener('place_changed', function() {
+              var place = autocomplete.getPlace();
+              if (!place.geometry) {
+                return;
+              }
+            });
+        
+            if ($('.main-search-input-item')[0]) {
+                setTimeout(function(){ 
+                    $(".pac-container").prependTo("#autocomplete-container");
+                }, 300);
+            }
+        }
+    </script>
+    
+    <!-- Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initAutocomplete"></script>
+    <script type="text/javascript" src="{% static 'scripts/infobox.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/markerclusterer.js' %} "></script>
+    <script type="text/javascript" src="{% static 'scripts/maps.js' %}"></script>
+    
+    <script>
+        // infoBox Rating Type
+        var infoBox_ratingType = 'numerical-rating';
+    </script>
+{% endblock %}

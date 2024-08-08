@@ -1,0 +1,85 @@
+{% extends 'bases/index-base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+<div class="clearfix"></div>
+<!-- Header Container / End -->
+
+
+<!-- Content
+================================================== -->
+
+
+<!-- Container -->
+<div class="container padding-top-40">
+    <div class="small-dialog-header">
+        <h3>Sign In</h3>
+    </div>
+   <div class="col-lg-6 col-md-6">
+       <!-- Sign In Popup -->
+        <div id="sign-in-dialog">
+            {% if message %}
+            <div class="notification error closeable margin-bottom-50">
+				<p><span>Error!</span> {{ message }}</p>
+				<a class="close" href="#"></a>
+			</div>
+            {% endif %}
+        
+            <!--Tabs -->
+            <div class="sign-in-form style-1">
+        
+                <ul class="tabs-nav">
+                    <li class=""><a href="#">Log In</a></li>
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                </ul>
+        
+                <div class="tabs-container alt">
+                    <!-- Login -->
+                    <div class="tab-content" id="" style="">
+                        <form method="post" action="{% url 'login' %}" class="login">
+                            {% csrf_token %}
+                            
+                            <p class="form-row form-row-wide">
+                                <label for="username">Username:
+                                    <i class="im im-icon-Male"></i>
+                                    <input type="text" class="input-text" name="username" id="username" value="" />
+                                </label>
+                            </p>
+        
+                            <p class="form-row form-row-wide">
+                                <label for="password">Password:
+                                    <i class="im im-icon-Lock-2"></i>
+                                    <input class="input-text" type="password" name="password" id="password"/>
+                                </label>
+                                <span class="lost_password">
+                                    <a href="#" >Lost Your Password?</a>
+                                </span>
+                            </p>
+        
+                            <div class="form-row">
+                                <input type="submit" class="button border margin-top-5" name="login" value="Login" />
+                                <div class="checkboxes margin-top-10">
+                                    <input id="remember-me" type="checkbox" name="check">
+                                    <label for="remember-me">Remember Me</label>
+                                </div>
+                            </div>
+                            
+                        </form>
+                    </div>
+        
+                    
+                    
+        
+                </div>
+            </div>
+        </div>
+        <!-- Sign In Popup / End -->
+   </div>
+</div>
+
+<!-- Container / End -->
+
+
+{% endblock %}

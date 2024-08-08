@@ -1,0 +1,99 @@
+{% extends 'bases/dashboard-base.html' %}
+{% load static %}
+
+{% block content %}
+    	<!-- Content
+	================================================== -->
+	<div class="dashboard-content">
+
+		<!-- Titlebar -->
+		<div id="titlebar">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>My Profile</h2>
+					<!-- Breadcrumbs -->
+					<nav id="breadcrumbs">
+						<ul>
+							<li><a href="#">Home</a></li>
+							<li><a href="#">Dashboard</a></li>
+							<li>My Profile</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+        
+        <!-- Notice -->
+        {% if success_message %}
+        	<div class="row">
+			<div class="col-md-12">
+				<div class="notification success closeable margin-bottom-30">
+					<!--<p>Your listing <strong>Hotel Govendor</strong> has been approved!</p> -->
+                    <p>{{ success_message }}</p>
+					<a class="close" href="#"></a>
+				</div>
+			</div>
+		</div>
+        {% endif %} 
+        
+        {% if error_message %}
+        	<div class="row">
+			<div class="col-md-12">
+				<div class="notification error closeable margin-bottom-30">
+					<!--<p>Your listing <strong>Hotel Govendor</strong> has been approved!</p> -->
+                    <p>{{ error_message }}</p>
+					<a class="close" href="#"></a>
+				</div>
+			</div>
+		</div>
+        {% endif %} 
+    
+        <div class="dashboard-list-box margin-top-0">
+            <h4 class="gray">Détails Profil</h4>
+            <div class="style-2 margin-left-10 margin-bottom-20 margin-right-10 ">
+                <ul class="tabs-nav">
+                    <li class="active"> <a href="#user-info-tab"><i class="sl sl-icon-user"></i> Info personelle</a> </li>
+                    <li class=""> <a href="#activity-description-tap"><i class="fa fa-file-text-o"></i> Description activité</a> </li>
+                    <li class=""> <a href="#user-location-tab"><i class="im im-icon-Location-2"></i> Localication </a> </li>
+                    <li class=""> <a href="#social-link-tab"><i class="sl sl-icon-link"></i> Réseaux</a> </li>
+                </ul>
+               <!-- Table Content -->
+                <div class="tabs-container dashboard-list-box-static">
+                    <!-- User info Content -->
+                    <div class="tab-content" id="user-info-tab">
+                        <div class="my-profile col-md-6">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button class="button margin-top-15">Enregistrer les changements</button>
+                            </form>    
+                        </div>
+                        
+                    </div>
+                    <!-- Activity description -->
+                    <div class="tab-content" id="activity-description-tap">
+                        <div class="my-profile col-md-6">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ activity_form }}
+                                <button class="button margin-top-15">Enregistrer les changements</button>
+                            </form>    
+                        </div>
+                    </div>
+                    <!-- Activity Location -->
+                    <div class="tab-content" id="user-location-tab">
+                        
+                    </div>
+                    <!-- Social Link Location -->
+                    <div class="tab-content" id="social-link-tab">
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+	</div>
+	<!-- Content / End -->
+    
+{% endblock %}

@@ -1,0 +1,181 @@
+{% extends 'bases/dashboard-base.html' %}
+{% load static %}
+
+{% block content %}
+    	<!-- Content
+	================================================== -->
+	<div class="dashboard-content">
+
+		<!-- Titlebar -->
+		<div id="titlebar">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>My Profile</h2>
+					<!-- Breadcrumbs -->
+					<nav id="breadcrumbs">
+						<ul>
+							<li><a href="#">Home</a></li>
+							<li><a href="#">Dashboard</a></li>
+							<li>My Profile</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+        
+        <!-- Notice -->
+        {% if success_message %}
+        	<div class="row">
+			<div class="col-md-12">
+				<div class="notification success closeable margin-bottom-30">
+					<!--<p>Your listing <strong>Hotel Govendor</strong> has been approved!</p> -->
+                    <p>{{ success_message }}</p>
+					<a class="close" href="#"></a>
+				</div>
+			</div>
+		</div>
+        {% endif %} 
+        
+        {% if error_message %}
+        	<div class="row">
+			<div class="col-md-12">
+				<div class="notification error closeable margin-bottom-30">
+					<!--<p>Your listing <strong>Hotel Govendor</strong> has been approved!</p> -->
+                    <p>{{ error_message }}</p>
+					<a class="close" href="#"></a>
+				</div>
+			</div>
+		</div>
+        {% endif %} 
+    
+		
+		<div class="row">
+			<!-- Profile -->
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box">
+					<h4 class="gray">Profile Details</h4>
+                
+                    <form method="post"  enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="dashboard-list-box-static">
+	                    {{ form.as_p }}
+						<button class="button margin-top-15">Enregistré les changement</button>
+					</div>    
+                    </form>
+					
+				</div>
+			</div>
+            
+            <!-- Change Location -->
+            <div class="col-lg-6 col-md-12 margin-bottom-10">
+                <div class="dashboard-list-box">
+                    <h4 class="gray"><i class="sl sl-icon-location"></i> Localisation de l'activié</h4>
+                    <form>
+                        <div class="dashboard-list-box-static">
+            
+                            <!-- Row -->
+                            <div class="row with-forms">
+            
+                                <!-- City -->
+                                <div class="col-md-6">
+                                    <h5>Ville</h5>
+                                    <input type="text" placeholder="Abidjan" name="city">
+                                </div>
+            
+                                <!-- Address -->
+                                <div class="col-md-6">
+                                    <h5>Commune</h5>
+                                    <input type="text" placeholder="Cocody" name="town">
+                                </div>
+            
+                                <!-- City -->
+                                
+                                <div class="col-fs-12">
+                                    <h5>Adresse</h5>
+									<div class="input-with-icon location">
+										<div id="autocomplete-container">
+											<input id="autocomplete-input" type="text" placeholder="Angré chateau" name="adresse">
+										</div>
+										<a href="#"><i class="fa fa-map-marker"></i></a>
+									</div>
+								</div>
+                                <div class="col-fs-12">
+                                    <div id="map-container">
+                                        <div id="map" data-map-zoom="9" data-map-scroll="true">
+                                            <!-- map goes here -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Row / End -->
+                        </div>
+                    </form>    
+                </div>
+            </div>
+
+			<!-- Change Password -->
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box margin-top-0">
+					<h4 class="gray">Change Password</h4>
+					<div class="dashboard-list-box-static">
+
+						<!-- Change Password -->
+						<div class="my-profile">
+							<label class="margin-top-0">Current Password</label>
+							<input type="password">
+
+							<label>New Password</label>
+							<input type="password">
+
+							<label>Confirm New Password</label>
+							<input type="password">
+
+							<button class="button margin-top-15">Change Password</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+            
+			<!-- Copyrights -->
+			<div class="col-md-12">
+				<div class="copyrights">© 2021 Listeo. All Rights Reserved.</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- Content / End -->
+{% endblock %}
+{% block googleMap %}
+    <script>
+          function initAutocomplete() {
+            var input = document.getElementById('autocomplete-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+        
+            autocomplete.addListener('place_changed', function() {
+              var place = autocomplete.getPlace();
+              if (!place.geometry) {
+                return;
+              }
+            });
+        
+            if ($('.main-search-input-item')[0]) {
+                setTimeout(function(){ 
+                    $(".pac-container").prependTo("#autocomplete-container");
+                }, 300);
+            }
+        }
+    </script>
+    
+    <!-- Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initAutocomplete"></script>
+    <script type="text/javascript" src="{% static 'scripts/infobox.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/markerclusterer.js' %} "></script>
+    <script type="text/javascript" src="{% static 'scripts/maps.js' %}"></script>
+    
+    <script>
+        // infoBox Rating Type
+        var infoBox_ratingType = 'numerical-rating';
+    </script>
+{% endblock %}

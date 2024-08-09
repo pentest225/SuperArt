@@ -1,0 +1,300 @@
+{% extends 'bases/index-base.html' %}
+{% load static %}
+
+{% block content %}
+    <!-- Slider
+================================================== -->
+<div class="listing-slider mfp-gallery-container margin-bottom-0">
+    {% for service_image in service.service_images.all %}
+    	<a href="{{ service_image.image.url }}" data-background-image="{{service_image.image.url}}" class="item mfp-gallery" title="{{ service.name }}"></a>
+    {% endfor %}
+</div>
+
+
+<!-- Content
+================================================== -->
+<div class="container">
+	<div class="row sticky-wrapper">
+		<div class="col-lg-8 col-md-8 padding-right-30">
+
+			<!-- Titlebar -->
+			<div id="titlebar" class="listing-titlebar">
+				<div class="listing-titlebar-title">
+					<h2>{{ service.name }} <span class="listing-tag">{{ service.sector }}</span></h2>
+					<span>
+						<a href="#listing-location" class="listing-address">
+							<i class="fa fa-map-marker"></i>
+							{{ service.address}}, {{ service.town }} {{ service.city }}
+						</a>
+					</span>
+					<div class="star-rating" data-rating="{{ service.get_rating_average }}">
+						<div class="rating-counter"><a href="#listing-reviews">({{ service.service_rating.all.count }} avis)</a></div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Listing Nav -->
+			<div id="listing-nav" class="listing-nav-container">
+				<ul class="listing-nav">
+					<li><a href="#listing-overview" class="active">Aperçu</a></li>
+					<li><a href="#listing-pricing-list">Tarifs</a></li>
+					<li><a href="#listing-location">Localisation</a></li>
+					<li><a href="#listing-reviews">Avis</a></li>
+					<li><a href="#add-review">Ajouter un avis</a></li>
+				</ul>
+			</div>
+			
+			<!-- Overview -->
+			<div id="listing-overview" class="listing-section">
+
+				<!-- Description -->
+				<p>
+					{{ service.description }}
+				</p>
+                
+				<!-- Listing Contacts -->
+				<div class="listing-links-container">
+
+					<ul class="listing-links contact-links">
+						<li><a href="tel:{{ service.artisan.phone_number }}" class="listing-links"><i class="fa fa-phone"></i>
+                            {{ service.artisan.phone_number }}</a></li>
+						<li><a href="mailto:{{ service.artisan.user.email }}" class="listing-links"><i class="fa fa-envelope-o"></i>
+                            {{service.artisan.user.email}}</a>
+						</li>
+{#						<li><a href="#" target="_blank"  class="listing-links"><i class="fa fa-link"></i> www.example.com</a></li>#}
+					</ul>
+					<div class="clearfix"></div>
+
+					<ul class="listing-links">
+                        {% for media in service.artisan.artist_set.all %}
+                        	<li><a href="{{ media.url }}" target="_blank" class="listing-links-fb"><i class="sl sl-icon-link"></i>
+                                {{ media.media_type }}</a></li>
+                        {% endfor %}
+
+					</ul>
+					<div class="clearfix"></div>
+
+				</div>
+				<div class="clearfix"></div>
+            
+			</div>
+        
+		    		<!-- Food Menu -->
+			<div id="listing-pricing-list" class="listing-section">
+				<h3 class="listing-desc-headline margin-top-70 margin-bottom-30">Tarifs</h3>
+
+					<div class="pricing-list-container">
+						<!-- Food List -->
+						<h4> {{ service.price }} Fcfa {{ service.price_type }}</h4>
+					</div>
+
+			</div>
+			<!-- Food Menu / End -->
+			<!-- Location -->
+			<div id="listing-location" class="listing-section">
+				<h3 class="listing-desc-headline margin-top-60 margin-bottom-30">Location</h3>
+
+				<div id="singleListingMap-container">
+					<div id="singleListingMap" data-latitude="{{ service.location_lat }}" data-longitude="{{ service.location_lon }}" data-map-icon="sl sl-icon-location-pin"></div>
+					<a href="#" id="streetView">Street View</a>
+				</div>
+			</div>
+				
+			<!-- Reviews -->
+			<div id="listing-reviews" class="listing-section">
+				<h3 class="listing-desc-headline margin-top-75 margin-bottom-20">Avis <span>({{ service.service_rating.all.count }})</span></h3>
+            
+				<div class="clearfix"></div>
+
+				<!-- Reviews -->
+				<section class="comments listing-reviews">
+					<ul>
+                        {% for rating in service.service_rating.all %}
+                        	<li>
+							<div class="avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /></div>
+							<div class="comment-content"><div class="arrow-comment"></div>
+								<div class="comment-by">{{ rating.client_rating.name }} <i class="tip" data-tip-content="Person who left this review actually was a customer"></i> <span class="date">{{ rating.crate_at }}</span>
+									<div class="star-rating" data-rating="{{ rating.rating }}"></div>
+								</div>
+								<p>{{ rating.message }}</p>
+								
+								<div class="review-images mfp-gallery-container">
+                                    {% for service_rating_image in rating.service_rating_images.all %}
+                                    	<a href="{{ service_rating_image.image.url }}" class="mfp-gallery"><img src="{{ service_rating_image.image.url }}" alt=""></a>
+                                    {% endfor %}
+								</div>
+								<a href="#" class="rate-review"><i class="sl sl-icon-like"></i> Utile <span>{{ rating.like }}</span></a>
+							</div>
+						</li>
+                        {% endfor %}
+					 </ul>
+				</section>
+
+				
+			</div>
+            {% if add_review_success %}
+                <div class="notification success closeable">
+                    <p><span>Success!</span> {{ add_review_success }}</p>
+                    <a class="close" href="#"></a>
+			    </div>	
+            {% endif %} 
+            
+			<!-- Add Review Box -->
+			<div id="add-review" class="add-review-box">
+				<!-- Add Review -->
+				<h3 class="listing-desc-headline margin-bottom-10">Ajouter un avis</h3>
+				<p class="comment-notes">Votre adresse email ne sera pas publiée.</p>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- Subratings Container -->
+                    <div class="sub-ratings-container">
+                        <!-- Subrating #1 -->
+                        <div class="add-sub-rating">
+                            <div class="sub-rating-title">Service<i class="tip" data-tip-content="Quality of customer service and attitude to work with you"></i></div>
+                            <div class="sub-rating-stars">
+                                <!-- Leave Rating -->
+                                <div class="clearfix"></div>
+                                <div class="leave-rating">
+                                    <input type="radio" name="rating" id="rating-1" value="1"/>
+                                    <label for="rating-1" class="fa fa-star"></label>
+                                    <input type="radio" name="rating" id="rating-2" value="2"/>
+                                    <label for="rating-2" class="fa fa-star"></label>
+                                    <input type="radio" name="rating" id="rating-3" value="3"/>
+                                    <label for="rating-3" class="fa fa-star"></label>
+                                    <input type="radio" name="rating" id="rating-4" value="4"/>
+                                    <label for="rating-4" class="fa fa-star"></label>
+                                    <input type="radio" name="rating" id="rating-5" value="5"/>
+                                    <label for="rating-5" class="fa fa-star"></label>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <!-- Subrating #2 -->
+                        <div class="add-sub-rating">
+                            <div class="sub-rating-title">Rapport qualité/prix <i class="tip" data-tip-content="Overall experience received for the amount spent"></i></div>
+                            <div class="sub-rating-stars">
+                                <!-- Leave Rating -->
+                                <div class="clearfix"></div>
+                                <div class="leave-rating">
+                                    <input type="radio" name="quality" id="rating-11" value="1"/>
+                                    <label for="rating-11" class="fa fa-star"></label>
+                                    <input type="radio" name="quality" id="rating-12" value="2"/>
+                                    <label for="rating-12" class="fa fa-star"></label>
+                                    <input type="radio" name="quality" id="rating-13" value="3"/>
+                                    <label for="rating-13" class="fa fa-star"></label>
+                                    <input type="radio" name="quality" id="rating-14" value="4"/>
+                                    <label for="rating-14" class="fa fa-star"></label>
+                                    <input type="radio" name="quality" id="rating-15" value="5"/>
+                                    <label for="rating-15" class="fa fa-star"></label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Uplaod Photos -->
+                        <div class="uploadButton margin-top-15">
+                            <input class="uploadButton-input" type="file"  name="images" accept="image/*, application/pdf" id="upload" multiple/>
+                            <label class="uploadButton-button ripple-effect" for="upload">Ajouter des images </label>
+                            <span class="uploadButton-file-name"></span>
+                        </div>
+                        <!-- Uplaod Photos / End -->
+    
+                    </div>
+                    <!-- Subratings Container / End -->
+    
+                    <!-- Review Comment -->
+                    <div id="add-comment" class="add-comment">
+                        <fieldset>
+                            <div>
+                                <label>Avis:</label>
+                                <textarea rows="2" name="content"></textarea>
+                            </div>
+    
+                        </fieldset>
+    
+                        <button class="button">Enregistrer votre avis</button>
+                        <div class="clearfix"></div>
+                    </div>    
+                </form>
+				
+
+			</div>
+			<!-- Add Review Box / End -->
+        
+		</div>
+
+
+		<!-- Sidebar
+		================================================== -->
+		<div class="col-lg-4 col-md-4 margin-top-75 sticky">
+
+				
+			<!-- Verified Badge -->
+			<div class="verified-badge with-tip" data-tip-content="Listing has been verified and belongs the business owner or manager.">
+				<i class="sl sl-icon-check"></i> Verified Listing
+			</div>
+
+			<!-- Message Vendor -->
+			<div id="booking-widget-anchor" class="boxed-widget booking-widget message-vendor margin-top-35">
+				<h3><i class="fa fa-envelope-o"></i> Envoyer un message </h3>
+				<div class="row with-forms  margin-top-0">
+                    <form method="post" action="{% url 'services:send-message' %}">
+                        {% csrf_token %}
+                        <div class="col-lg-12">
+                            {{ message_form }}
+					    </div>
+					
+					    <button type="submit" class="button book-now fullwidth margin-top-5">Envoyer</button>
+                    </form>
+				</div>
+
+				<!-- Recaptcha Holder -->
+				<div class="captcha-holder">
+					<!-- Recaptcha goes here -->
+				</div>
+				
+				<!-- Book Now -->
+				
+			</div>
+			<!-- Book Now / End -->
+            
+			<!-- Contact -->
+			<div class="boxed-widget margin-top-35">
+				<div class="hosted-by-title">
+					<h4><span>Hosted by</span> <a href="#">{{ service.artisan.user }}</a></h4>
+					<a href="#" class="hosted-by-avatar"><img src="{{ service.artisan.profile_image.url }}" alt=""></a>
+				</div>
+				<ul class="listing-details-sidebar">
+					<li><i class="sl sl-icon-phone"></i> {{ service.artisan.phone_number }}</li>
+					<!-- <li><i class="sl sl-icon-globe"></i> <a href="#">http://example.com</a></li> -->
+					<li><i class="fa fa-envelope-o"></i> <a href="#">{{ service.artisan.user.email }}</a></li>
+				</ul>
+
+				<ul class="listing-details-sidebar social-profiles">
+                    {% for link in service.artisan.artist_set.all %}
+                        <li><a href="{{ link.url }}" class="facebook-profile"><i class="fa fa-facebook-square"></i> {{ link.media_type }}</a></li>
+                    {% endfor %}
+
+				</ul>
+
+				<!-- Reply to review popup -->
+				<div id="small-dialog" class="zoom-anim-dialog mfp-hide">
+					<div class="small-dialog-header">
+						<h3>Envoyer un message</h3>
+					</div>
+					<div class="message-reply margin-top-0">
+						<textarea cols="40" rows="3" placeholder="Your message to Tom"></textarea>
+						<button class="button">Envoyer</button>
+					</div>
+				</div>
+
+				<a href="#small-dialog" class="send-message-to-owner button popup-with-zoom-anim"><i class="sl sl-icon-envelope-open"></i> Envoyer </a>
+			</div>
+			<!-- Contact / End-->
+        
+		</div>
+		<!-- Sidebar / End -->
+
+	</div>
+</div>
+
+{% endblock %}

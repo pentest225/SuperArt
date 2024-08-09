@@ -1,0 +1,52 @@
+[
+    {
+        "main_image": "services/menuiserie_placard.jpg",
+        "name": "Fabrication de placards sur mesure",
+        "description": "Conception et installation de placards en bois massif, adaptés à vos besoins et à votre espace.",
+        "price": 150000.00,
+        "price_type": "Par projet",
+        "city": "Abidjan",
+        "town": "Cocody",
+        "address": "Angré 8ème Tranche"
+    },
+    {
+        "main_image": "services/electricite_domestique.jpg",
+        "name": "Installation électrique domestique",
+        "description": "Installation complète de votre réseau électrique pour maisons neuves ou en rénovation.",
+        "price": 200000.00,
+        "price_type": "Par projet",
+        "city": "Abidjan",
+        "town": "Yopougon",
+        "address": "Toits Rouges"
+    },
+    {
+        "main_image": "services/climatisation.jpg",
+        "name": "Installation de systèmes de climatisation",
+        "description": "Service d’installation et d’entretien de climatiseurs pour particuliers et entreprises.",
+        "price": 75000.00,
+        "price_type": "Par appareil",
+        "city": "Abidjan",
+        "town": "Marcory",
+        "address": "Zone 4"
+    },
+    {
+        "main_image": "services/peinture_interieure.jpg",
+        "name": "Peinture intérieure",
+        "description": "Travaux de peinture pour tous types de surfaces intérieures, avec une large gamme de couleurs.",
+        "price": 5000.00,
+        "price_type": "Par mètre carré",
+        "city": "Abidjan",
+        "town": "Treichville",
+        "address": "Avenue 14"
+    },
+    {
+        "main_image": "services/jardinage.jpg",
+        "name": "Aménagement paysager",
+        "description": "Création et entretien de jardins, pelouses, et espaces verts.",
+        "price": 300000.00,
+        "price_type": "Par projet",
+        "city": "Abidjan",
+        "town": "Bingerville",
+        "address": "Riviera 3"
+    }
+]

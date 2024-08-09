@@ -51,6 +51,7 @@ PRICE_CHOICES = [
     ('/mois', 'Par mois'),
     ('/ans', 'Par Année'),
     ('/h', 'Par Heures'),
+    ('/min', 'A Partir de'),
 ]
 
 
@@ -95,7 +96,7 @@ class Artisan(models.Model):
     is_delete = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user.username
+        return self.user.first_name
 
 
 MEDIA_TYPE = [

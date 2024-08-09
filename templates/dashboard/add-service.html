@@ -1,0 +1,206 @@
+{% extends 'bases/dashboard-base.html' %}
+{% load static %}
+
+{% block content %}
+    	<!-- Content
+	================================================== -->
+	<div class="dashboard-content">
+
+		<!-- Titlebar -->
+		<div id="titlebar">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>Ajouter une annonces</h2>
+					<!-- Breadcrumbs -->
+					<nav id="breadcrumbs">
+						<ul>
+							<li><a href="#">Home</a></li>
+							<li><a href="#">Dashboard</a></li>
+							<li>Ajouter une annonces</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+            <form method="post" enctype="multipart/form-data"> 
+                {% csrf_token %}
+                <div class="col-lg-12">
+                    <div id="add-listing">
+                        <!-- Section -->
+                        <div class="add-listing-section">
+    
+                            <!-- Headline -->
+                            <div class="add-listing-headline">
+                                <h3><i class="sl sl-icon-doc"></i> Informations de l'annonce</h3>
+                            </div>
+    
+                            <!-- Title -->
+                            <div class="row with-forms">
+                                <div class="col-md-12">
+                                    <h5>Titre <i class="tip" data-tip-content="Name of your business"></i></h5>
+                                    {{ form.name }}
+                                </div>
+                            </div>
+                            
+                            <div class="row with-forms">
+                                <div class="col-md-12">
+                                    <h5>Description <i class="tip" data-tip-content="Name of your business"></i></h5>
+                                    {{ form.description }}
+                                </div>
+                            </div>
+                            <!-- Row -->
+                            <div class="row with-forms">
+                                <!-- Status -->
+                                <!-- Type -->
+{#                                <div class="col-md-12">#}
+{#                                    <h5>Tags <i class="tip" data-tip-content="Maximum of 15 keywords related with your business"></i></h5>#}
+{#                                    {{ form.tags }}#}
+{#                                </div>#}
+    
+                            </div>
+                            <!-- Row / End -->
+                        </div>
+                        <!-- Section / End -->
+    
+                        <!-- Section -->
+                        <div class="add-listing-section margin-top-45">
+    
+                            <!-- Headline -->
+                            <div class="add-listing-headline">
+                                <h3><i class="sl sl-icon-location"></i> Localisation </h3>
+                            </div>
+    
+                            <div class="submit-section">
+    
+                                <!-- Row -->
+                                <div class="row with-forms">
+    
+                                    <!-- City -->
+                                    <div class="col-md-6">
+                                        <h5>Ville</h5>
+                                        {{ form.city }}
+                                    </div>
+    
+                                    <!-- Address -->
+                                    <div class="col-md-6">
+                                        <h5>Commune</h5>
+                                        {{ form.town }}
+                                    </div>
+    
+                                    <!-- City -->
+                                    <div class="col-md-12">
+                                        <h5>Adresse</h5>
+                                        {{ form.address }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div id="map-container">
+                                            <div id="map" data-map-zoom="9" data-map-scroll="true">
+                                                <!-- map goes here -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Row / End -->
+    
+                            </div>
+                        </div>
+                        <!-- Section / End -->
+                        <!-- Section -->
+                        <div class="add-listing-section margin-top-45">
+                            
+                            <!-- Headline -->
+                            <div class="add-listing-headline">
+                                <h3><i class="sl sl-icon-book-open"></i> Prix</h3>
+                                <!-- Switcher -->
+                            </div>
+                            <div class="row with-forms">
+    
+                                    <!-- Price -->
+                                    <div class="col-md-6">
+                                        <h5>Prix</h5>
+                                        {{ form.price }}
+                                    </div>
+    
+                                    <!-- Price Type -->
+                                    <div class="col-md-6">
+                                        <h5>Par /</h5>
+                                        {{ form.price_type }}
+                                    </div>
+                                </div>
+                        </div>
+                        <!-- Section / End -->
+                        <div class="add-listing-section margin-top-45">
+    
+                            <!-- Headline -->
+                            <div class="add-listing-headline">
+                                <h3><i class="sl sl-icon-picture"></i> Gallery</h3>
+                            </div>
+    
+                            <!-- Dropzone -->
+                            <div class="row with-forms">
+                                <!-- Main image -->
+                                <div class="col-md-6">
+                                    <h5>Image Principale</h5>
+                                    {{ form.main_image }}
+                                </div>
+
+                                <!-- autherImage -->
+                                <div class="col-md-6">
+                                    <h5>Autres Images /</h5>
+                                    <input type="file" multiple name="auther_images" class="form-control">
+                                </div>
+                                </div>
+                        </div>
+                        <button type="submit" class="button preview">Enregistré <i class="fa fa-arrow-circle-right"></i></button>
+                    </div>
+			    </div>    
+            </form>
+            
+			<!-- Copyrights -->
+			<div class="col-md-12">
+				<div class="copyrights">© 2021 Listeo. All Rights Reserved.</div>
+			</div>
+
+		</div>
+
+	</div>
+	<!-- Content / End -->
+{% endblock %}
+
+{% block jsScript %}
+<script type="text/javascript" src="{% static 'scripts/dropzone.js' %}"></script>
+{% endblock %}
+{% block googleMap %}
+    <script>
+          function initAutocomplete() {
+            var input = document.getElementById('autocomplete-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+        
+            autocomplete.addListener('place_changed', function() {
+              var place = autocomplete.getPlace();
+              if (!place.geometry) {
+                return;
+              }
+            });
+        
+            if ($('.main-search-input-item')[0]) {
+                setTimeout(function(){ 
+                    $(".pac-container").prependTo("#autocomplete-container");
+                }, 300);
+            }
+        }
+    </script>
+    
+    <!-- Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initAutocomplete"></script>
+    <script type="text/javascript" src="{% static 'scripts/infobox.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/markerclusterer.js' %} "></script>
+    <script type="text/javascript" src="{% static 'scripts/maps.js' %}"></script>
+    
+    <script>
+        // infoBox Rating Type
+        var infoBox_ratingType = 'numerical-rating';
+    </script>
+{% endblock %}

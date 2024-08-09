@@ -110,16 +110,16 @@
 			</ul>
 			
 			<ul data-submenu-title="Listings">
-				<li><a><i class="sl sl-icon-layers"></i> My Listings</a>
+				<li><a><i class="sl sl-icon-layers"></i> Mes annonces</a>
 					<ul>
-						<li><a href="#">Active <span class="nav-tag green">6</span></a></li>
+						<li><a href="{% url 'dashboard_services' %}">Active <span class="nav-tag green">6</span></a></li>
 						<li><a href="#">Pending <span class="nav-tag yellow">1</span></a></li>
 						<li><a href="#">Expired <span class="nav-tag red">2</span></a></li>
 					</ul>	
 				</li>
-				<li><a href="#"><i class="sl sl-icon-star"></i> Reviews</a></li>
-				<li><a href="#"><i class="sl sl-icon-heart"></i> Bookmarks</a></li>
-				<li><a href="#"><i class="sl sl-icon-plus"></i> Add Listing</a></li>
+				<li><a href="#"><i class="sl sl-icon-star"></i> Commentaires </a></li>
+				<li><a href="#"><i class="sl sl-icon-heart"></i> Annonces</a></li>
+				<li><a href="{% url 'dashboard_add_service' %}"><i class="sl sl-icon-plus"></i> Ajouter une annonces</a></li>
 			</ul>	
 
 			<ul data-submenu-title="Account">
@@ -162,6 +162,9 @@
 <script type="text/javascript" src="{% static 'scripts/custom.js' %}"></script>
 {% block googleMap %}
 
+{% endblock %}
+
+{% block jsScript %}
 {% endblock %}
 
 </body>

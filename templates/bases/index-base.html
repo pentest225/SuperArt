@@ -62,29 +62,25 @@
 			<div class="right-side">
 				<!-- Header Widget -->
 				<div class="header-widget">
-					
 					<!-- User Menu -->
                     {% if request.user.is_authenticated %}
                         <div class="user-menu">
-                            <div class="user-name"><span><img src="{% static 'images/dashboard-avatar.jpg' %}" alt=""></span>Hi,
-                                {{ request.user.username }}!</div>
+                            <div class="user-name"><span><img src="{{ request.user.user_artisan_set.profile_image.url }}" alt=""></span>Hi,{{ request.user.last_name }}!</div>
                             <ul>
                                 <li><a href="{% url 'dashboard' %}"><i class="sl sl-icon-settings"></i> Dashboard</a></li>
                                 <li><a href="#"><i class="sl sl-icon-envelope-open"></i> Messages</a></li>
-                                <li><a href="#"><i class="fa fa-calendar-check-o"></i> Bookings</a></li>
+                                <li><a href="#"><i class="fa fa-calendar-check-o"></i> Annonces</a></li>
                                 <li><a href="{% url 'logout' %}"><i class="sl sl-icon-power"></i> Logout</a></li>
                             </ul>
                         </div>
                        <!-- <a href="#sign-in-dialog" class="button border with-icon">Ajouter un service <i class="sl sl-icon-plus"></i></a>  -->
-                          
                     {% else %}
                     
                     <a href="{% url 'login' %}" class="sign-in popup-with-zoom-anim"><i class="sl sl-icon-login"></i> Sign In</a>
                     {% endif %}
                     <a href="{% url 'create_service' %}" class="button border with-icon">Ajouter un service <i class="sl sl-icon-plus"></i></a>
-
-					
-				</div>
+                    
+                </div>
 				<!-- Header Widget / End -->
 			</div>
 			<!-- Right Side Content / End -->
@@ -301,10 +297,10 @@
 <script type="text/javascript" src="{% static 'scripts/typed.js' %}"></script>
 <script>
 var typed = new Typed('.typed-words', {
-strings: ["Attractions"," Restaurants"," Hotels"],
+strings: ["Coiffeur"," Cordonnier"," Cordonnier","Couturier","Mécanicien","Menuisier"],
 	typeSpeed: 80,
 	backSpeed: 80,
-	backDelay: 4000,
+	backDelay: 2000,
 	startDelay: 1000,
 	loop: true,
 	showCursor: true

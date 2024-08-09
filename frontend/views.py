@@ -1,21 +1,25 @@
 import random
 
 from django.contrib.auth.models import User
-from django.utils.datastructures import MultiValueDictKeyError
-
-# from frontend.forms.artisan_form import ArtisanForm
+from services.models import Service, ServiceImage
 from users.models import Client, Artisan, Sector, ArtisanMediaLink, SubscriptionPlan
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from frontend.forms.user_info_form import UserInfoForm
 from frontend.forms.activity_info_form import ActivityInfoForm
+from frontend.forms.create_service_form import ServiceForm
+from .models import HomeCarouselImage
 
 
 # Create your views here.
 
 def index(request):
-    return render(request, 'index.html')
+    sectors = Sector.objects.all()
+    home_images = HomeCarouselImage.objects.all()
+    services = Service.objects.all()
+    print(services)
+    return render(request, 'index.html', {'sectors': sectors, 'home_image': home_images, 'services': services})
 
 
 def pricing(request):
@@ -78,7 +82,9 @@ def dashboard_messages(request):
 
 
 def dashboard_services(request):
-    pass
+    # services = Service.objects.filter(status= "active")
+    services = Service.objects.all()
+    return render(request, 'dashboard/sevice-list.html', {'services': services})
 
 
 def dashboard_service_detail(request):
@@ -253,6 +259,7 @@ def register_artisan(request):
 
 def save_activity_info(request):
     sectors = Sector.objects.all()
+
     form = ActivityInfoForm()
     sector_choice = [(sector.id, sector.name) for sector in sectors]
     error_message = {}
@@ -268,7 +275,6 @@ def save_activity_info(request):
             artisan.whatsApp_phone = cleaned_data['whatsApp_phone']
             artisan.bio = cleaned_data['bio']
             artisan.save()
-
             return redirect('register_artisan_step_3')
         else:
             print("Form is not valid")
@@ -371,11 +377,6 @@ def save_activity_location(request):
             artisan.save()
             return redirect('index')
         else:
-            print("Form is not valid")
-            print(city)
-            print(town)
-            print(address)
-            print(request.POST)
             error_message['form'] = "Merci de vérifier les informations"
 
     return render(request, 'auth/register-artisan/step-3-location.html')
@@ -417,4 +418,53 @@ def register(request):
 
 @login_required(login_url='pricing')
 def create_service(request):
-    return render(request, 'create-service.html')
+    data = {
+        "main_image": "services/peinture_interieure.jpg",
+        "name": "Peinture intérieure",
+        "description": "Travaux de peinture pour tous types de surfaces intérieures, avec une large gamme de couleurs.",
+        "price": 5000.00,
+        "price_type": "Par mètre carré",
+        "city": "Abidjan",
+        "town": "Treichville",
+        "address": "Avenue 14"
+    }
+    form = ServiceForm(data)
+    if request.method == 'POST':
+        form = ServiceForm(request.POST, request.FILES)
+        auther_image = request.FILES.getlist('auther_images')
+        location = mock_location[random.randint(0, len(mock_location) - 1)]
+        if form.is_valid() and auther_image:
+            clear_data = form.cleaned_data
+            main_image = clear_data['main_image']
+            artisan = Artisan.objects.get(user=request.user)
+            sector = artisan.sector
+
+            service = Service.objects.create(
+                artisan=artisan,
+                sector=sector,
+                main_image=main_image,
+                name=clear_data['name'],
+                description=clear_data['description'],
+                price=clear_data['price'],
+                price_type=clear_data['price_type'],
+                address=clear_data['address'],
+                city=clear_data['city'],
+                town=clear_data['town'],
+                location_lat= location["location_lat"],
+                location_lon= location["location_lon"],
+                status="waiting"
+            )
+            service.save()
+            print("Save Service")
+            for image in auther_image:
+                save_image = ServiceImage.objects.create(service=service, image=image)
+                save_image.save()
+            return redirect('dashboard')
+        else:
+            print("Form is not valid")
+            print(auther_image)
+            print(form.errors)
+            print(request.FILES)
+            print(request.POST)
+
+    return render(request, 'dashboard/add-service.html', {'form': form})
